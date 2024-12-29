@@ -5,6 +5,7 @@ from os import mkdir
 from os.path import exists
 import tkinter as tk
 from PIL import Image
+import tkinter.filedialog
 
 working_dir = pathlib.Path().resolve()
 storage_dir = working_dir.joinpath("bmps")
@@ -117,18 +118,29 @@ class BMPCreator(tk.Frame):
                 self.buttons[i][j].grid(row=j, column=i)
         self.clone_button = tk.Button(self, text="Duplicate frame to end", command=self.clone_frame)
         self.clone_button.grid(row=44, column=36, columnspan=8, sticky="news")
+        
         self.clear_button = tk.Button(self, text="Clear frame", command=self.clear_frame)
         self.clear_button.grid(row=44, column=20, columnspan=4, sticky="news")
+        
         self.clear_button = tk.Button(self, text="Delete frame", command=self.del_frame)
         self.clear_button.grid(row=44, column=24, columnspan=4, sticky="news")
+        
         self.create_button = tk.Button(self, text="Create new frame", command=self.create_frame)
         self.create_button.grid(row=44, column=28, columnspan=8, sticky="news")
+        
         self.incr_button = tk.Button(self, text="++", command=self.incr_frame)
-        self.incr_button.grid(row=44, column=10, columnspan=10, sticky="news")
+        self.incr_button.grid(row=44, column=12, columnspan=8, sticky="news")
+        
         self.decr_button = tk.Button(self, text="--", command=self.decr_frame)
-        self.decr_button.grid(row=44, column=0, columnspan=10, sticky="news")
+        self.decr_button.grid(row=44, column=4, columnspan=8, sticky="news")
+        
+        #ToDo add an Disclaimer that this overwrites the current frame
+        self.import_button = tk.Button(self, text="Import from BMP", command=(lambda: self.load_frame_from_bmp(tk.filedialog.askopenfilename())))
+        self.import_button.grid(row=44, column=0, columnspan=4, sticky="news")
+        
         self.frame_counter = tk.Label(self, text=f"{self.frame + 1}/{len(self.frames)}", bg="black", fg="white")
         self.frame_counter.grid(row=45, column=0, columnspan=40, sticky="news")
+        
         self.save_button = tk.Button(self, text="Save", command=self.save)
         self.save_button.grid(row=45, column=40, columnspan=4, sticky="news")
 
@@ -138,6 +150,19 @@ class BMPCreator(tk.Frame):
             self.frames[self.frame].append([])
             for j in range(11):
                 self.frames[self.frame][i].append(False)
+                
+    def load_frame_from_bmp(self, filename):
+        # Load the bmp into the current editor
+        img = Image.open(filename)
+        img = img.convert("RGB")    
+        img = img.resize((44, 11))
+        img = img.convert("1")
+        pixels = img.load()
+        for i in range(44):
+            for j in range(11):
+                self.frames[self.frame][i][j] = pixels[i, j] == 255
+        self.redraw()
+        
 
 
 if __name__ == "__main__":
