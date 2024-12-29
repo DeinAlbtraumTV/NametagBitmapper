@@ -3,6 +3,7 @@ import json
 import pathlib
 from os import mkdir
 from os.path import exists
+import sys
 import tkinter as tk
 from PIL import Image
 import tkinter.filedialog
@@ -94,8 +95,12 @@ class BMPCreator(tk.Frame):
         self.frames = []
         if not exists(storage_dir):
             mkdir(storage_dir)
-
-        self.filename = input("Filename: ")
+            
+        # skip the filename input if a filename is passed as argument
+        if len(args) > 0:
+            self.filename = args[0]
+        else:
+            self.filename = input("Filename: ")
 
         if not self.filename.endswith(".json"):
             self.filename += ".json"
