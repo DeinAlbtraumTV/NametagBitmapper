@@ -3,6 +3,7 @@ import json
 import pathlib
 from os import mkdir
 from os.path import exists
+import sys
 import tkinter as tk
 from PIL import Image
 import tkinter.filedialog
@@ -101,8 +102,12 @@ class BMPCreator(tk.Frame):
 
         if not exists(storage_dir):
             mkdir(storage_dir)
-
-        self.filename = input("Filename: ")
+            
+        # skip the filename input if a filename is passed as argument
+        if len(args) > 0:
+            self.filename = args[0]
+        else:
+            self.filename = input("Filename: ")
 
         if exists(storage_dir.joinpath(self.filename + ".json")):
             print(f"Loading {self.filename}")
@@ -170,6 +175,7 @@ class BMPCreator(tk.Frame):
 
 
 if __name__ == "__main__":
+    args = sys.argv[1:]
     root = tk.Tk()
     BMPCreator(root).pack(fill="both", expand=True)
     root.mainloop()
