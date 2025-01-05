@@ -83,7 +83,7 @@ class BMPCreator(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         
-        #top row
+        # top row
         self.import_button = None
         self.decr_button = None
         self.incr_button = None       
@@ -102,7 +102,7 @@ class BMPCreator(tk.Frame):
         self.frame_counter = None
         self.save_button = None
         
-        #close button
+        # close button
         self.close_button = None
         
         self.img = tk.PhotoImage(width=1, height=1)
