@@ -9,7 +9,8 @@ from PIL import Image
 import tkinter.filedialog
 
 working_dir = pathlib.Path().resolve()
-storage_dir = working_dir.joinpath("bmps")
+storage_dir = working_dir.joinpath("saved")
+export_dir = working_dir.joinpath("bmps")
 
 class BMPCreator(tk.Frame):
     def toggle_pxl(self, x, y):
@@ -75,10 +76,13 @@ class BMPCreator(tk.Frame):
                     if self.frames[frame][i][j]:
                         pixels[frame * 48 + i, j] = (255, 255, 255)
 
-        with open(storage_dir.joinpath(self.filename), "w") as f:
+        with open(storage_dir.joinpath(self.filename + ".json"), "w") as f:
             json.dump(self.frames, f)
 
-        img.save(working_dir.joinpath(self.filename.replace(".json", ".bmp")))
+        if not exists(export_dir):
+            mkdir(export_dir)
+
+        img.save(export_dir.joinpath(self.filename))
 
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
@@ -109,6 +113,7 @@ class BMPCreator(tk.Frame):
         self.buttons = None
         self.frame = 0
         self.frames = []
+
         if not exists(storage_dir):
             mkdir(storage_dir)
             
@@ -118,10 +123,7 @@ class BMPCreator(tk.Frame):
         else:
             self.filename = input("Filename: ")
 
-        if not self.filename.endswith(".json"):
-            self.filename += ".json"
-
-        if exists(storage_dir.joinpath(self.filename)):
+        if exists(storage_dir.joinpath(self.filename + ".json")):
             print(f"Loading {self.filename}")
             self.load()
         else:
@@ -155,7 +157,7 @@ class BMPCreator(tk.Frame):
         self.decr_button = tk.Button(self, text="--", command=self.decr_frame)
         self.decr_button.grid(row=45, column=4, columnspan=8, sticky="news")
         
-        #ToDo add an Disclaimer that this overwrites the current frame
+        #ToDo add a Disclaimer that this overwrites the current frame
         self.import_button = tk.Button(self, text="Import from BMP", command=(lambda: self.load_frame_from_bmp(tk.filedialog.askopenfilename())))
         self.import_button.grid(row=45, column=0, columnspan=4, sticky="news")
         
