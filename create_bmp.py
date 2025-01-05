@@ -82,13 +82,29 @@ class BMPCreator(tk.Frame):
 
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        self.save_button = None
-        self.frame_counter = None
+        
+        #top row
+        self.import_button = None
         self.decr_button = None
-        self.incr_button = None
-        self.clone_button = None
+        self.incr_button = None       
+        
         self.clear_button = None
+        self.delete_button = None
         self.create_button = None
+        self.clone_button = None
+        
+        # bottom row
+        self.shift_frame_left_button = None
+        self.shift_frame_right_button = None
+        self.shift_frame_up_button = None
+        self.shift_frame_down_button = None
+        
+        self.frame_counter = None
+        self.save_button = None
+        
+        #close button
+        self.close_button = None
+        
         self.img = tk.PhotoImage(width=1, height=1)
         self.buttons = None
         self.frame = 0
@@ -127,8 +143,8 @@ class BMPCreator(tk.Frame):
         self.clear_button = tk.Button(self, text="Clear frame", command=self.clear_frame)
         self.clear_button.grid(row=45, column=20, columnspan=4, sticky="news")
         
-        self.clear_button = tk.Button(self, text="Delete frame", command=self.del_frame)
-        self.clear_button.grid(row=45, column=24, columnspan=4, sticky="news")
+        self.delete_button = tk.Button(self, text="Delete frame", command=self.del_frame)
+        self.delete_button.grid(row=45, column=24, columnspan=4, sticky="news")
         
         self.create_button = tk.Button(self, text="Create new frame", command=self.create_frame)
         self.create_button.grid(row=45, column=28, columnspan=8, sticky="news")
@@ -143,17 +159,17 @@ class BMPCreator(tk.Frame):
         self.import_button = tk.Button(self, text="Import from BMP", command=(lambda: self.load_frame_from_bmp(tk.filedialog.askopenfilename())))
         self.import_button.grid(row=45, column=0, columnspan=4, sticky="news")
         
-        self.shift_frame_left = tk.Button(self, text="⇦ (h)", command=self.shift_frame_left) #h
-        self.shift_frame_left.grid(row=46, column=0, columnspan=4, sticky="news")
+        self.shift_frame_left_button = tk.Button(self, text="⇦ (h)", command=self.shift_frame_left) #h
+        self.shift_frame_left_button.grid(row=46, column=0, columnspan=4, sticky="news")
         
-        self.shift_frame_down = tk.Button(self, text="⇩ (j)", command=self.shift_frame_down) # j
-        self.shift_frame_down.grid(row=46, column=4, columnspan=4, sticky="news")
+        self.shift_frame_down_button = tk.Button(self, text="⇩ (j)", command=self.shift_frame_down) # j
+        self.shift_frame_down_button.grid(row=46, column=4, columnspan=4, sticky="news")
         
-        self.shift_frame_up = tk.Button(self, text="⇧ (k)", command=self.shift_frame_up) #k
-        self.shift_frame_up.grid(row=46, column=8, columnspan=4, sticky="news")
+        self.shift_frame_up_button = tk.Button(self, text="⇧ (k)", command=self.shift_frame_up) #k
+        self.shift_frame_up_button.grid(row=46, column=8, columnspan=4, sticky="news")
         
-        self.shift_frame_right = tk.Button(self, text="⇨ (l)", command=self.shift_frame_right) #l
-        self.shift_frame_right.grid(row=46, column=12, columnspan=4, sticky="news")
+        self.shift_frame_right_button = tk.Button(self, text="⇨ (l)", command=self.shift_frame_right) #l
+        self.shift_frame_right_button.grid(row=46, column=12, columnspan=4, sticky="news")
         
         self.frame_counter = tk.Label(self, text=f"{self.frame + 1}/{len(self.frames)}", bg="black", fg="white")
         self.frame_counter.grid(row=46, column=16, columnspan=40-12, sticky="news") #todo columspan
